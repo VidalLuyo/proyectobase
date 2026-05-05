@@ -55,6 +55,10 @@ pipeline {
             steps {
                 echo '⚡ Ejecutando pruebas de carga con JMeter...'
                 script {
+                    // Limpia reportes anteriores
+                    bat 'if exist jmeter-report rmdir /s /q jmeter-report'
+                    bat 'if exist results.jtl del /f results.jtl'
+                    
                     // Ejecuta JMeter en modo no-GUI
                     bat """
                         "${JMETER_HOME}\\bin\\jmeter.bat" -n -t jmeter-test-plan.jmx -l results.jtl -e -o jmeter-report
