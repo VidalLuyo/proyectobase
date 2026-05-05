@@ -2,6 +2,8 @@ package vallegrande.edu.pe.controller;
 
  import org.springframework.web.bind.annotation.*;
  import vallegrande.edu.pe.model.Product;
+ import vallegrande.edu.pe.model.LoginRequest;
+ import vallegrande.edu.pe.model.LoginResponse;
  import vallegrande.edu.pe.service.ProductService;
 
  import java.util.List;
@@ -27,6 +29,15 @@ public class ApiController {
         return productService.getAll();
     }
 
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        // Simulación simple de login para pruebas de JMeter
+        if ("admin".equals(request.getUsername()) && "password".equals(request.getPassword())) {
+            return new LoginResponse(true, "Login exitoso", "token-123456");
+        }
+        return new LoginResponse(false, "Credenciales inválidas", null);
+    }
+
     // ❌ Método innecesariamente complejo
     @GetMapping("/check")
     public String check() {
@@ -43,6 +54,7 @@ public class ApiController {
         }
         return "FAIL";
     }
+    
     @GetMapping("/ping")
     public String ping() {
         return "OK";
