@@ -15,10 +15,10 @@ pipeline {
             }
         }
         
-        stage('Run Application') {
+        stage('Verificar Artefacto') {
             steps {
-                echo 'Ejecutando la aplicación Spring Boot...'
-                bat 'mvn spring-boot:run'
+                echo 'Verificando que el JAR se generó correctamente...'
+                bat 'dir target\\*.jar'
             }
         }
     }
