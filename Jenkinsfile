@@ -36,7 +36,8 @@ pipeline {
                         echo '✅ Análisis de SonarCloud completado'
                     } catch (Exception e) {
                         echo "⚠️ Error en análisis de SonarCloud: ${e.message}"
-                        echo "Verifica que el token de SonarCloud esté configurado en Jenkins"
+                        echo "⚠️ Continuando sin SonarCloud - ya tienes los resultados en la web"
+                        // No falla el build, solo advierte
                     }
                 }
             }
