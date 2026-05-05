@@ -1,11 +1,6 @@
 pipeline {
     agent any
     
-    tools {
-        maven 'Maven 3.6.3'
-        jdk 'JDK 11'
-    }
-    
     stages {
         stage('Checkout') {
             steps {
@@ -16,14 +11,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Compilando el proyecto...'
-                bat 'mvn clean install'
+                sh 'mvn clean install'
             }
         }
         
         stage('Run Application') {
             steps {
                 echo 'Ejecutando la aplicación Spring Boot...'
-                bat 'mvn spring-boot:run'
+                sh 'mvn spring-boot:run'
             }
         }
     }
