@@ -11,14 +11,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Compilando el proyecto...'
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
         
         stage('Run Application') {
             steps {
                 echo 'Ejecutando la aplicación Spring Boot...'
-                sh 'mvn spring-boot:run'
+                bat 'mvn spring-boot:run'
             }
         }
     }
