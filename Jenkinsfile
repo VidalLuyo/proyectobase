@@ -55,28 +55,23 @@ pipeline {
             steps {
                 echo '⚡ Ejecutando pruebas de carga con JMeter...'
                 script {
-                    try {
-                        // Ejecuta JMeter en modo no-GUI
-                        bat """
-                            "${JMETER_HOME}\\bin\\jmeter.bat" -n -t jmeter-test-plan.jmx -l results.jtl -e -o jmeter-report
-                        """
-                        
-                        echo '✅ Pruebas de JMeter completadas'
-                        
-                        // Publica los resultados
-                        publishHTML([
-                            allowMissing: false,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'jmeter-report',
-                            reportFiles: 'index.html',
-                            reportName: 'JMeter Report'
-                        ])
-                        
-                    } catch (Exception e) {
-                        echo "⚠️ Error en pruebas de JMeter: ${e.message}"
-                        echo "Verifica que JMeter esté instalado en: ${JMETER_HOME}"
-                    }
+                    // Ejecuta JMeter en modo no-GUI
+                    bat """
+                        "${JMETER_HOME}\\bin\\jmeter.bat" -n -t jmeter-test-plan.jmx -l results.jtl -e -o jmeter-report
+                    """
+                    
+                    echo '✅ Pruebas de JMeter completadas'
+                    echo '📊 Reporte generado en: jmeter-report/index.html'
+                    
+                    // Publica los resultados
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'jmeter-report',
+                        reportFiles: 'index.html',
+                        reportName: 'JMeter Report'
+                    ])
                 }
             }
         }
@@ -91,10 +86,13 @@ pipeline {
     
     post {
         always {
-            echo '🛑 Deteniendo aplicación...'
+            echo '🛑 Limpiando recursos...'
             script {
-                // Detiene el proceso de Spring Boot
-                bat 'taskkill /F /IM java.exe /T || exit 0'
+                // Detiene solo el proceso de Spring Boot, no todos los java.exe
+                bat '''
+                    for /f "tokens=5" %%a in ('netstat -aon ^| find ":8081" ^| find "LISTENING"') do taskkill /F /PID %%a 2>nul
+                    exit 0
+                '''
             }
         }
         success {
